@@ -86,6 +86,7 @@ class BookRepository(BookRepository):
     async def search_by_barcode(self, barcode: str) -> List[ResponseBookSchema]:
         query = select(Book).where(Book.barcode.like(f"{barcode}%")).options(
             joinedload(Book.author))
+        
         # query = query.options(joinedload(Book.storing_information))
         session = await self._unit_of_work.get_db_session()
         result = await session.execute(query)
@@ -93,6 +94,8 @@ class BookRepository(BookRepository):
 
         response_books = []
         for book in books:
+            quantity_book = await self.get_by_id(book.key)
+            quantity_book = quantity_book.quantity
             author_data = None
             if book.author:
                 author_data = ResponseAuthorSchema.model_validate(book.author)
@@ -104,7 +107,7 @@ class BookRepository(BookRepository):
                     author=author_data,
                     publish_year=book.publish_year,
                     title=book.title,
-                    quantity=0
+                    quantity=quantity_book
                 )
             )
         return response_books

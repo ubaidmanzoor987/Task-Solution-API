@@ -6,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.client import DbClient
 
-
 class UnitOfWork:
     def __init__(
         self,

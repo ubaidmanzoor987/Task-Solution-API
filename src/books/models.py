@@ -11,7 +11,7 @@ class Book(Base):
     publish_year = Column(Integer, nullable=False)
     barcode = Column(String, nullable=False, unique=True)
     author_id = Column(Integer, ForeignKey("author.key"), nullable=False)
-
+    # storing_information_id = Column(Integer, ForeignKey("storing.key", nullable = False))
     author = relationship("Author", back_populates="books")
     storing_information = relationship("StoringInformation", back_populates="book")
 
